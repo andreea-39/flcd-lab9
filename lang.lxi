@@ -1,0 +1,73 @@
+git ad
+%{
+#include <math.h>
+#include <stdio.h>
+#include "scanner.h"
+int lines = 0;
+%}
+%option noyywrap
+
+DIGIT [0-9]
+LETTER  [a-z]|[A-Z]
+STRING  ["]({LETTER}|{DIGIT})*["]
+NUMBER	[+|-]?[1-9]{DIGIT}*|0
+CHAR [']({LETTER}|{DIGIT})[']
+CONSTANT    {STRING}|{NUMBER}|{CHAR}
+IDENTIFIER   _[a-zA-Z]+[0-9]*
+
+INVALID_NUMBER [0]+{DIGIT}*
+INVALID_IDENTIFIER  _[a-zA-Z]*[0-9]*[a-zA-Z]*
+INVALID_CONSTANT {NUMBER}+{LETTER}+
+
+%%
+
+"{"	{printf( "Separator: %s\n", yytext ); return 0;}
+"}"	{printf( "Separator: %s\n", yytext ); return 0;}
+"("	{printf( "Separator: %s\n", yytext ); return 0;}
+")"	{printf( "Separator: %s\n", yytext ); return 0;}
+"["	{printf( "Separator: %s\n", yytext ); return 0;}
+"]"	{printf( "Separator: %s\n", yytext ); return 0;}
+","	{printf( "Separator: %s\n", yytext ); return 0;}
+";"	{printf( "Separator: %s\n", yytext ); return 0;}
+":"	{printf( "Separator: %s\n", yytext ); return 0;}
+">>" {printf( "Separator: %s\n", yytext ); return 0;}
+"<<" {printf( "Separator: %s\n", yytext ); return 0;}
+
+"+"	{printf( "Operator: %s\n", yytext ); return 0;}
+"-"	{printf( "Operator: %s\n", yytext ); return 0;}
+"*"	{printf( "Operator: %s\n", yytext ); return 0;}
+"/"	{printf( "Operator: %s\n", yytext ); return 0;}
+"="	{printf( "Operator: %s\n", yytext ); return 0;}
+"%"	{printf( "Operator: %s\n", yytext ); return 0;}
+">"	{printf( "Operator: %s\n", yytext ); return 0;}
+">=" {printf( "Operator: %s\n", yytext ); return 0;}
+"<"	{printf( "Operator: %s\n", yytext ); return 0;}
+"<=" {printf( "Operator: %s\n", yytext ); return 0;}
+"==" {printf( "Operator: %s\n", yytext ); return 0;}
+"!="  {printf( "Operator: %s\n", yytext ); return 0;}
+
+
+"if"|"for"|"else"|"read"|"write"|"while"|"for"|"in"|"range"|"integer"|"string"|"char"|"main" printf( "A keyword: %s\n", yytext );
+
+{IDENTIFIER}	{printf( "Identifier: %s\n", yytext); return 0;}
+{CONSTANT}	{printf( "Constant: %s\n", yytext ); return 0;}
+
+
+[ \t]+	/* remove white spaces */  	{}
+[\n]+	{++lines;}
+
+{INVALID_IDENTIFIER} {printf("Illegal identifier %s at line %d\n", yytext, lines); return -1;}
+{INVALID_NUMBER} {printf("Illegal number %s at line %d\n", yytext, lines); return -1;}
+.|{INVALID_CONSTANT} {printf("Illegal symbol %s at line %d\n", yytext, lines); return -1;}
+
+%%
+
+int main( int argc, char **argv )
+{
+    ++argv, --argc; /* skip over program name */
+    if ( argc > 0 )
+    yyin = fopen( argv[0], "r" );
+    else
+    yyin = stdin;
+    yylex();
+}
