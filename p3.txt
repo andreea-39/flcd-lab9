@@ -1,0 +1,15 @@
+main(){
+	_a: string;
+	_a = "aa" + "bb" + "cc";
+	_c: char;
+	_c = 'a';
+	_b: string [];
+	read >> _b ;
+	
+	for _eachElement in _b{
+	 if(_a == _eachElement){
+		write << "da";
+	 }
+	}
+}
+

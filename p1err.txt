@@ -1,0 +1,19 @@
+main () {
+	_a: string [ ];
+	read >> _a;
+
+	for _eachElement in _a {
+		write <<_eachElement;
+	}
+
+	_b, _c: integer;
+	_b = 2 * 3 + 10;
+	_c = 7;
+	if (_2b - _c > 7) {
+		write << "da";
+	} else {
+		write << "nu";
+	}
+	
+	
+}
